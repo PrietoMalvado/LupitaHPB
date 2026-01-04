@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Para Lupita 🌸</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Kaushan+Script&display=swap" rel="stylesheet">
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+
+/* ===== BODY ===== */
+body{
+  font-family:'Kaushan Script', cursive;
+  height:100vh;
+  overflow:hidden;
+  color:#fff;
+  background:url("./img/fondo_c.jpg") center/cover no-repeat fixed;
+}
+
+/* ===== OVERLAY ===== */
+.overlay{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.45);
+  z-index:0;
+}
+
+/* ===== START SCREEN ===== */
+.startScreen{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.9);
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  z-index:10;
+  text-align:center;
+}
+.startScreen h2{
+  color:#ffb6c1;
+  font-size:1.8em;
+  animation:pulse 1.5s infinite;
+}
+@keyframes pulse{
+  0%,100%{opacity:.6}
+  50%{opacity:1}
+}
+
+/* ===== LUNA ===== */
+.moon{
+  position:fixed;
+  top:20px;
+  right:20px;
+  width:110px;
+  height:110px;
+  border-radius:50%;
+  background:radial-gradient(circle,#fff,#ddd);
+  box-shadow:0 0 40px #fff;
+  opacity:.85;
+  z-index:1;
+}
+
+/* ===== PETALOS ===== */
+.petal{
+  position:fixed;
+  top:-40px;
+  width:18px;
+  height:18px;
+  background:pink;
+  border-radius:50% 50% 50% 0;
+  opacity:.7;
+  animation:fall linear infinite;
+  z-index:1;
+}
+@keyframes fall{
+  to{transform:translateY(110vh) rotate(360deg)}
+}
+
+/* ===== CONTENEDOR ===== */
+.container{
+  position:relative;
+  z-index:2;
+  height:100vh;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  padding:15px;
+}
+
+/* ===== PAGINA ===== */
+.page{
+  width:100%;
+  max-width:420px;
+  height:88vh;
+  background:rgba(0,0,0,.55);
+  border-radius:20px;
+  box-shadow:0 0 30px rgba(255,182,193,.6);
+  padding:15px;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  animation:fadeIn .8s ease;
+}
+
+@keyframes fadeIn{
+  from{opacity:0;transform:translateY(20px)}
+  to{opacity:1;transform:translateY(0)}
+}
+
+.page img{
+  max-width:100%;
+  max-height:60%;
+  object-fit:contain;
+  border-radius:15px;
+  box-shadow:0 0 20px rgba(255,182,193,.8);
+}
+
+.page p{
+  margin-top:15px;
+  font-size:1.2em;
+  text-align:center;
+  color:#ffe4e1;
+}
+
+/* ===== FINAL ===== */
+.final{
+  text-align:center;
+}
+.final h2{
+  color:#ffb6c1;
+  margin-bottom:10px;
+}
+.final button{
+  margin-top:15px;
+  padding:10px 22px;
+  border:none;
+  border-radius:25px;
+  background:pink;
+  color:#4a001f;
+  font-size:1em;
+  cursor:pointer;
+}
+</style>
+</head>
+
+<body>
+
+<div class="overlay"></div>
+
+<!-- START -->
+<div class="startScreen" id="startScreen">
+  <h2>Toca para comenzar 🌸</h2>
+</div>
+
+<!-- LUNA -->
+<div class="moon"></div>
+
+<div class="container">
+  <div class="page" id="page"></div>
+</div>
+
+<!-- AUDIO -->
+<audio id="bgMusic" loop>
+  <source src="./audio/mañanitas.mp3" type="audio/mpeg">
+</audio>
+
+<script>
+/* ===== CONTENIDO ===== */
+const pages=[
+ {img:"./img/01.png",txt:"Lupita 🌸<br>Este pequeño álbum es para ti"},
+ {img:"./img/02.png",txt:"Por todos los momentos simples que se vuelven recuerdos"},
+ {img:"./img/03.png",txt:"Gracias por las risas y las charlas sin prisa"},
+ {img:"./img/04.png",txt:"Las amistades verdaderas se sienten como hogar"},
+ {img:"./img/05.png",txt:"Que la vida te regale siempre sonrisas"},
+ {final:true}
+];
+
+let index=0;
+const page=document.getElementById("page");
+
+/* ===== RENDER ===== */
+function render(){
+  if(pages[index].final){
+    page.innerHTML=`
+      <div class="final">
+        <h2>Gracias por ser mi amiga 💖</h2>
+        <h1>Que cumplas muchos años mas :D.</h1>
+        <button onclick="location.href='https://prietomalvado.github.io/game_EPC/'">
+          Ver algo especial :p
+        </button>
+      </div>`;
+    return;
+  }
+
+  page.innerHTML=`
+    <img src="${pages[index].img}">
+    <p>${pages[index].txt}</p>`;
+}
+
+/* ===== AUTO AVANCE ===== */
+setInterval(()=>{
+  if(index < pages.length-1){
+    index++;
+    render();
+  }
+},10000);
+
+/* ===== PETALOS ===== */
+for(let i=0;i<25;i++){
+  const p=document.createElement("div");
+  p.className="petal";
+  p.style.left=Math.random()*100+"vw";
+  p.style.animationDuration=6+Math.random()*6+"s";
+  document.body.appendChild(p);
+}
+
+/* ===== AUDIO START ===== */
+const startScreen=document.getElementById("startScreen");
+const music=document.getElementById("bgMusic");
+
+startScreen.addEventListener("click",()=>{
+  music.play();
+  startScreen.style.display="none";
+});
+
+render();
+</script>
+
+</body>
+</html>
+
